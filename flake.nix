@@ -15,17 +15,18 @@
     fenix,
     ...
   }: let
-    pkgs = nixpkgs.legacyPackages."x86_64-linux";
+    version = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages."${version}";
   in {
-    devShells."x86_64-linux".default = pkgs.mkShell {
+    devShells."${version}".default = pkgs.mkShell {
       buildInputs = [
-        (with fenix.packages."x86_64-linux";
+        (with fenix.packages."${version}";
           with stable;
             combine [
               rustc
               cargo
               llvm-tools-preview
-              targets.x86_64-unknown-linux-gnu.stable.rust-std
+              targets.x86_64-unknown-linux-gnu.stable.rust-std #this target should match the triple in CARGO_TARGET_<triple>_LINKER
               rust-analyzer
               clippy
             ])
